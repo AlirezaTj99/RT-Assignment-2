@@ -3,7 +3,7 @@
 import rospy
 import math
 from assignment_2_2023.msg import Vel
-from assignment_2_2023.srv import AvePosVel, AvePosVelResponse
+from assignment_2_2023.srv import Ave_pos_vel, Ave_pos_velResponse
 
 
 # Define a class for the service
@@ -17,13 +17,13 @@ class InfoService:
         rospy.init_node('info_service')
         rospy.loginfo("Info service node initialized")
 
-        # Provide a service named 'info_service', using the custom service type AvePosVel
-        rospy.Service("info_service", AvePosVel, self.get_values)
+        # Provide a service named 'info_service', using the custom service type Ave_pos_vel
+        rospy.Service("info_service", Ave_pos_vel, self.get_values)
         # Subscribe to the '/pos_vel' topic, using the custom message type Vel
-        rospy.Subscriber("/pos_vel", Vel, self.dandAverageVCalculator)
+        rospy.Subscriber("/pos_vel", Vel, self.dAndAverageVCalculator)
 
     # Callback function for the subscriber
-    def dandAverageVCalculator(self, msg):
+    def dAndAverageVCalculator(self, msg):
         # Get the desired x and y positions from the parameter server
         GX = rospy.get_param('/des_pos_x')
         GY = rospy.get_param('/des_pos_y')
@@ -52,17 +52,17 @@ class InfoService:
     # Callback function for the service
     def get_values(self, _):      
         # Return a response with the distance and average velocity
-        return AvePosVelResponse(self.distance, self.average_vel_x)		      
+        return Ave_pos_velResponse(self.distance, self.averageVx)		      
 
     # Function to keep the node running
-    def spin(self):
+    def keepRun(self):
         rospy.spin()
 
 # Main function
 if __name__ == "__main__":
     # Create an instance of the service class
     service = InfoService()
-    dist_vel_service = rospy.ServiceProxy('info_service', AvePosVel)
+    dist_vel_service = rospy.ServiceProxy('info_service', Ave_pos_vel)
 
     while not rospy.is_shutdown():
             # Call the service
@@ -72,4 +72,4 @@ if __name__ == "__main__":
  
 
     # Start the node
-    service.spin()
+    service.keepRun()

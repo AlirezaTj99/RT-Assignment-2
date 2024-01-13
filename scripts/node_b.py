@@ -5,7 +5,7 @@ from assignment_2_2023.msg import Vel
 from assignment_2_2023.srv import Input, InputResponse
 
 # Define a class for the service
-class LastTarget:
+class LastTargetService:
     def __init__(self):
         # Initialize class variables for the last desired x and y positions
         self.lastGX = 0
@@ -32,12 +32,12 @@ class LastTarget:
         return response
 
     # Function to keep the node running
-    def spin(self):
+    def keepRun(self):
         rospy.spin()
 
 # Main function
 if __name__ == "__main__":
     # Create an instance of the service class
-    service = LastTarget()
+    service = LastTargetService()
     # Start the node
-    service.spin()
+    service.keepRun()
