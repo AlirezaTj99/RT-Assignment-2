@@ -24,16 +24,19 @@ class InfoService:
 
     # Callback function for the subscriber
     def dAndAverageVCalculator(self, msg):
-        # Get the desired x and y positions from the parameter server
-        GX = rospy.get_param('/des_pos_x')
-        GY = rospy.get_param('/des_pos_y')
+        try:
+            GX = rospy.get_param('/des_pos_x')
+            GY = rospy.get_param('/des_pos_y')
 
-        # Get the window size for the velocity calculation from the parameter server
-        velocity_window_size = rospy.get_param('/window_size')
+            velocity_window_size = rospy.get_param('/window_size')
+        
+        except rospy.ROSException as e:
+            rospy.logerr(f"{rospy.get_name()}: Parameter retrieval failed: {e}")
+            return
         
         # Get the actual x and y positions from the message
-        x = msg.pos_x
-        y = msg.pos_y
+        x, y = msg.pos_x, msg.pos_y
+
         
         # Calculate the distance between the desired and actual positions
         Gcoordinates = [GX, GY]

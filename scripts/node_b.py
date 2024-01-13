@@ -22,9 +22,15 @@ class LastTargetService:
     def inputCall(self, _):
         # Create a response message
         response = InputResponse()
-        # Set the x and y inputs in the response to the last desired positions
-        self.lastGX = rospy.get_param('/des_pos_x')
-        self.lastGY = rospy.get_param('/des_pos_y')
+        
+        try:
+            # Set the x and y inputs in the response to the last desired positions
+            self.lastGX = rospy.get_param('/des_pos_x')
+            self.lastGY = rospy.get_param('/des_pos_y')
+        except rospy.ROSException as e:
+            rospy.logerr(f"Error getting desired positions: {e}")
+            # Handle the error appropriately
+            
         response.inpux = self.lastGX
         response.inpuy = self.lastGY
 
