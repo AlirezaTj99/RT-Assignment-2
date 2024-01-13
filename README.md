@@ -47,5 +47,3 @@ This is a ROS Python script (`node_c.py`) serving as a ROS service similar to `n
 3. Execute the node: `rosrun <your_package_name> node_c.py`.
 4. Use the provided service `input` to get the last desired position: `rosservice call /input`.
 
-## Note
-Both `node_b.py` and `node_c.py` seem identical. If you intended them to serve different purposes, please provide additional information. If they indeed have the same functionality, you may choose either one for your application.
