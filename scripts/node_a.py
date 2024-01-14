@@ -1,35 +1,35 @@
 #! /usr/bin/env python3
 
 # Import necessary libraries
-import rospy
-from geometry_msgs.msg import Point, Pose, Twist
-from nav_msgs.msg import Odometry
-import actionlib
-import actionlib.msg
-import assignment_2_2023.msg
-from assignment_2_2023.msg import Vel
-from assignment_2_2023.msg import PlanningAction, PlanningGoal, PlanningResult
-from std_srvs.srv import SetBool
-from actionlib_msgs.msg import GoalStatus
+import rospy  # ROS Python library
+from geometry_msgs.msg import Point, Pose, Twist  # ROS geometry message types
+from nav_msgs.msg import Odometry  # ROS navigation message types
+import actionlib  # ROS actionlib library
+import actionlib.msg  # ROS actionlib message types
+import assignment_2_2023.msg  # Custom ROS message types
+from assignment_2_2023.msg import Vel  # Custom ROS message type
+from assignment_2_2023.msg import PlanningAction, PlanningGoal, PlanningResult  # Custom ROS action message types
+from std_srvs.srv import SetBool  # ROS standard services
+from actionlib_msgs.msg import GoalStatus  # ROS actionlib message type
 
-#defining the class
+# Defining the class
 class Goal:
     def __init__(self):
         # Initialize publisher and action client
-        self.pub = rospy.Publisher("/pos_vel", Vel, queue_size=1)
-        self.client = actionlib.SimpleActionClient('/reaching_goal', assignment_2_2023.msg.PlanningAction)
-        self.client.wait_for_server()
+        self.pub = rospy.Publisher("/pos_vel", Vel, queue_size=1)  # ROS publisher for position and velocity
+        self.client = actionlib.SimpleActionClient('/reaching_goal', assignment_2_2023.msg.PlanningAction)  # ROS action client
+        self.client.wait_for_server()  # Wait for the action server to be available
         self.goal_cancelled = True  # Flag to track if the current goal has been cancelled
 
     def goal(self):
         while not rospy.is_shutdown():
             # Subscribe to /odom topic and publish position and velocity
-            rospy.Subscriber("/odom", Odometry, self.pubPosVelocity)
+            rospy.Subscriber("/odom", Odometry, self.pubPosVelocity)  # Subscribe to odometry topic
             # Get user command
             command = input("If you want to set a goal (press '1') or cancel the current process (press '0')?")
             # Get current target position
-            gPosx = rospy.get_param('/des_pos_x')
-            gPosy = rospy.get_param('/des_pos_y')
+            gPosx = rospy.get_param('/des_pos_x')  # Get desired X position from parameter server
+            gPosy = rospy.get_param('/des_pos_y')  # Get desired Y position from parameter server
 
             # Create a new goal with the current target position
             goal = assignment_2_2023.msg.PlanningGoal()
@@ -39,7 +39,7 @@ class Goal:
 
             if command == '1':
                 try:
-                    # Get new goal coordinates from user
+                    # Get new goal coordinates from the user
                     inpux = float(input("Where do you wanna go? (in X direction) "))
                     inpuy = float(input("Where do you wanna go? (in Y direction) "))
                 except ValueError:
@@ -63,9 +63,9 @@ class Goal:
                     self.client.cancel_goal()
                     rospy.loginfo("We have cancelled the goal... ")
                 else:
-                    rospy.loginfo("What you doing? I see no active goal to cancell")
+                    rospy.loginfo("What you doing? I see no active goal to cancel")
             else:
-                rospy.logwarn("Can not understand your input. You gotta enter '0' or '1'")
+                rospy.logwarn("Cannot understand your input. You gotta enter '0' or '1'")
 
             rospy.loginfo("Your last input is: [X , Y] = [%f , %f]", goal.target_pose.pose.position.x, goal.target_pose.pose.position.y)
 
@@ -87,9 +87,9 @@ class Goal:
 
 def main():
     # Initialize the node and start handling goal commands
-    rospy.init_node('set_target_client')
-    handler = Goal()
-    handler.goal()
+    rospy.init_node('set_target_client')  # Initialize ROS node
+    handler = Goal()  # Create an instance of the Goal class
+    handler.goal()  # Call the goal method
 
 if __name__ == '__main__':
     main()
