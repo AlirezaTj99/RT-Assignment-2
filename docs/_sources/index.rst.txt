@@ -6,6 +6,18 @@
 Welcome to assignment_2_2023-main's documentation!
 ====================================================
 
+**1. Node for Action Client and Position-Velocity Publisher:**
+
+This node is responsible for two tasks. First, it acts as an action client allowing the user to either set a target location (x, y) for the robot to reach or cancel it. Second, it monitors the robot's position and velocity and publishes this information in a custom message format (x, y, vel_x, vel_z) on the topic /odom. It also utilizes feedback/status from the action server to determine when the robot reaches its target.
+
+**2. Service Node for Retrieving Last Target Coordinates:**
+
+This node is a service server that, upon receiving a request, returns the coordinates of the last target set by the user. It keeps track of the most recent target sent to the robot.
+
+**3. Service Node for Distance and Speed Calculation:**
+
+This node acts as a service server as well. It subscribes to the robot's position and velocity using a custom message format. When called, it calculates and provides two pieces of information: the distance of the robot from the target and the average speed of the robot. It computes the distance by comparing the robot's position with the target's position and calculates the average speed by analyzing the robot's velocity over time.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -20,20 +32,20 @@ Indices and tables
 * :ref:`search`
 
 assignment_2_2023-main's documentation!
-========================================
+=============================================
 This is the documentation of the assignment_2_2023-main package!
 
-**assignment_2_2023-main Modules (Node_a)**
+**Action Client**
 ==============================================
-.. automodule:: scripts.node_a
+.. automodule:: scripts.action_client
   :members:
   
-**assignment_2_2023-main Modules (Node_b)**
+**Last Target Service**
 ===============================================
-.. automodule:: scripts.node_b
+.. automodule:: scripts.last_target_service
    :members:
   
-**assignment_2_2023-main Modules (Node_c)**
+**Average Service**
 ===============================================
-.. automodule:: scripts.node_c
+.. automodule:: scripts.avg_service
    :members:
